@@ -1,3 +1,4 @@
+
 // Swing
 import javax.swing.text.*;
 import javax.swing.BorderFactory;
@@ -26,7 +27,6 @@ import java.awt.event.AdjustmentEvent;
 import java.awt.event.AdjustmentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 
 import java.io.File;
 import java.util.ArrayList;
@@ -72,6 +72,7 @@ public class Fenetre extends JFrame{
 
   public Fenetre(){
     discuTextPane.setEditable(false);
+    aideTextPane.setEditable(false);
 
     // Configuration de la fenêtre
     this.setTitle("MSN Remasterised");
@@ -280,16 +281,6 @@ public class Fenetre extends JFrame{
    * @param estMP Vrai si c'est un booléan, faux sinon
    * @param color Couleur du texte
    */
-
-  Style defaut = discuTextPane.getStyle("default");
-  Style nouveauStyle = discuTextPane.addStyle("nouveauStyle", defaut);
-  
-  StyleConstants.setForeground(nouveauStyle, Color.red);
-  StyleConstants.setFontSize(nouveauStyle, 11);
-
-  Document doc = discuTextPane.getDocument();
-  doc.insertString(doc.getLength(), "Le message", nouveauStyle);
-
   public void ajouterMessage(String enTete, String msg, Boolean estMP, Color color){
     try {
       // Configuration du style
@@ -313,6 +304,7 @@ public class Fenetre extends JFrame{
         }
       }
 
+      Boolean ajoutFin = false;
       if(!listeEmoji.isEmpty()){
         // Affichage du message avec les balise remplacé par les émojis
         String traitementMsg = msg;
@@ -322,9 +314,11 @@ public class Fenetre extends JFrame{
 
           if(separeMsg[0].equals("")){
             traitementMsg = separeMsg[1];
+            ajoutFin = true;
           }else{
             doc.insertString(doc.getLength(), separeMsg[0], style2);
             traitementMsg = separeMsg[0];
+            ajoutFin = false;
           }
 
           StyledDocument docStyle = (StyledDocument) discuTextPane.getDocument();
@@ -332,7 +326,7 @@ public class Fenetre extends JFrame{
           StyleConstants.setIcon(style, new ImageIcon ( "emoji/" + s + ".gif" ));
           docStyle.insertString(docStyle.getLength(), "invisible text", style);
         }
-        doc.insertString(doc.getLength(), traitementMsg, style2);
+        if(ajoutFin) doc.insertString(doc.getLength(), traitementMsg, style2);
       }else{
         doc.insertString(doc.getLength(), msg, style2);
       }
@@ -402,12 +396,10 @@ public class Fenetre extends JFrame{
         //On fait en sorte d'avoir un nom contenant que des caratères alphanumériques
         nomText.setText(nomText.getText().replaceAll("[^A-Za-z0-9]", ""));
 
-        System.out.println(ipText.getText() + Integer.parseInt(portText.getText()) + nomText.getText());
         client = new ClientConnexion(ipText.getText(), Integer.parseInt(portText.getText()), nomText.getText(), Fenetre.this);
         Thread t = new Thread(client);
-        System.out.println(client);
+        
         t.start();
-        System.out.println(this);
         chatPanel.setVisible(true);
         nom = nomText.getText();
 
