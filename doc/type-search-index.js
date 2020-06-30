@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"<Unnamed>","l":"ClientConnexion"},{"p":"<Unnamed>","l":"ClientProcessor"},{"p":"<Unnamed>","l":"Fenetre"},{"p":"<Unnamed>","l":"NomIndisponibleException"},{"p":"<Unnamed>","l":"Serveur"}]
